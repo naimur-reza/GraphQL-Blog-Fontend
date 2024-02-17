@@ -119,7 +119,11 @@ const AddProduct = (product: { product?: Product }) => {
             }
             {...register("features")}
             placeholder="Features"
-            className=""
+          />
+          <Input
+            defaultValue={product.product ? product.product.imageUrl : ""}
+            {...register("imageUrl")}
+            placeholder="Photo url"
           />
         </div>
 

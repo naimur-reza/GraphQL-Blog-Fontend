@@ -12,6 +12,7 @@ export type Product = {
   connectivity: string;
   powerSource: string;
   features: [];
+  imageUrl: string;
 };
 
 type TProductState = {

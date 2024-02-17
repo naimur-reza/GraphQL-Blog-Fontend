@@ -5,6 +5,7 @@ import SelectConnectivityPowerSource from "@/components/SelectConnectivityPowerS
 import SelectOS from "@/components/SelectOS";
 import SellProduct from "@/components/SellProduct";
 import DeleteProduct from "@/components/deleteProduct";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -101,6 +102,7 @@ const Products = () => {
                   }
                 />
               </TableCell>
+              <TableCell className="font-semibold">Product</TableCell>
               {columns.map((head) => (
                 <TableCell
                   className={`${head.className} font-semibold`}
@@ -122,6 +124,12 @@ const Products = () => {
                       onCheckedChange={() => handleCheckboxChange(product._id)}
                       checked={selectedProducts.includes(product._id)}
                     />
+                  </TableCell>
+                  <TableCell>
+                    <Avatar>
+                      <AvatarImage src={product.imageUrl} alt="product" />
+                      <AvatarFallback>P</AvatarFallback>
+                    </Avatar>
                   </TableCell>
                   {columns.map((column) => (
                     <TableCell className={column.className} key={column.label}>
