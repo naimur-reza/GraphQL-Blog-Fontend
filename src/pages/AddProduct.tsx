@@ -10,12 +10,15 @@ import {
   useUpdateProductMutation,
 } from "@/redux/features/product/productApi";
 import { Product } from "@/redux/features/product/productSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddProduct = (product: { product?: Product }) => {
+  const { user } = useAppSelector((state: RootState) => state.auth);
   const { register, handleSubmit } = useForm();
   const [powerSource, setPowerSource] = useState("");
   const [operatingSystem, setOperatingSystem] = useState("");
@@ -35,7 +38,11 @@ const AddProduct = (product: { product?: Product }) => {
       category: category === "" ? undefined : category,
       connectivity: connectivity === "" ? undefined : connectivity,
       brand: brand === "" ? undefined : brand,
+      addedBy: user?._id,
     };
+
+    if (product.product?.addedBy !== user?._id)
+      return toast.error("You don't have permission to edit this product");
 
     try {
       if (product.product) {
@@ -52,6 +59,8 @@ const AddProduct = (product: { product?: Product }) => {
   };
 
   const handleDuplicate = async () => {
+    if (product.product?.addedBy !== user?._id)
+      return toast.error("You don't have permission to duplicate this product");
     const duplicateData = {
       ...product.product,
       _id: undefined,

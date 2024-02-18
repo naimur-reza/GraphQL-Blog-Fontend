@@ -10,12 +10,18 @@ import {
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { Product } from "@/redux/features/product/productSlice";
 
-const EditProduct = ({ product }: { product?: Product }) => {
+const EditProduct = ({
+  product,
+  disabled,
+}: {
+  product?: Product;
+  disabled: boolean;
+}) => {
   return (
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button type="button" variant="secondary">
+          <Button disabled={disabled} type="button" variant="secondary">
             <Pencil1Icon />
           </Button>
         </DialogTrigger>

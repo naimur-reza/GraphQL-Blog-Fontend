@@ -13,6 +13,7 @@ export type Product = {
   powerSource: string;
   features: [];
   imageUrl: string;
+  addedBy: string;
 };
 
 type TProductState = {

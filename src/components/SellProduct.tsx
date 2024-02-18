@@ -16,12 +16,15 @@ import { useSellProductMutation } from "@/redux/features/product/productApi";
 
 import { toast } from "sonner";
 
-const SellProduct = ({ _id }: { _id: string }) => {
+const SellProduct = ({ _id, disabled }: { _id: string; disabled: boolean }) => {
   const { register, handleSubmit } = useForm();
 
   const [sellProduct] = useSellProductMutation();
 
   const onsubmit = async (data: FieldValues) => {
+    if (disabled)
+      return toast.error("You don't have permission to sell this product");
+
     try {
       const sellInfo = { _id, data };
       console.log(sellInfo);
@@ -37,6 +40,7 @@ const SellProduct = ({ _id }: { _id: string }) => {
       <Dialog>
         <DialogTrigger>
           <Button
+            disabled={disabled}
             variant={"destructive"}
             className="bg-sky-700/90 hover:bg-sky-900 ">
             <IdCardIcon />

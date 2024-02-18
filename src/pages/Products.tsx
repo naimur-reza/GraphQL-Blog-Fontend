@@ -21,9 +21,12 @@ import {
   useGetAllProductsQuery,
 } from "@/redux/features/product/productApi";
 import { Product } from "@/redux/features/product/productSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { useState } from "react";
 
 const Products = () => {
+  const { user } = useAppSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [price, setPrice] = useState(0);
   const [brand, setBrand] = useState("");
@@ -121,6 +124,7 @@ const Products = () => {
                 <TableRow key={product._id}>
                   <TableCell>
                     <Checkbox
+                      disabled={user?._id !== product.addedBy}
                       onCheckedChange={() => handleCheckboxChange(product._id)}
                       checked={selectedProducts.includes(product._id)}
                     />
@@ -138,9 +142,18 @@ const Products = () => {
                   ))}
 
                   <TableCell className="flex item-center gap-2">
-                    <SellProduct _id={product._id} />
-                    <EditProduct product={product} />
-                    <DeleteProduct _id={product._id} />
+                    <SellProduct
+                      disabled={user?._id !== product.addedBy}
+                      _id={product._id}
+                    />
+                    <EditProduct
+                      disabled={user?._id !== product.addedBy}
+                      product={product}
+                    />
+                    <DeleteProduct
+                      disabled={user?._id !== product.addedBy}
+                      _id={product._id}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

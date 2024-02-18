@@ -12,9 +12,18 @@ import { TrashIcon } from "@radix-ui/react-icons";
 import { useDeleteProductMutation } from "@/redux/features/product/productApi";
 import { toast } from "sonner";
 
-const DeleteProduct = ({ _id }: { _id: string }) => {
+const DeleteProduct = ({
+  _id,
+  disabled,
+}: {
+  _id: string;
+  disabled: boolean;
+}) => {
   const [deleteProduct] = useDeleteProductMutation(undefined);
   const handleDelete = async () => {
+    if (disabled)
+      return toast.error("You don't have permission to delete this product");
+
     try {
       await deleteProduct(_id);
       toast.success("Product Deleted Successfully");
@@ -27,7 +36,7 @@ const DeleteProduct = ({ _id }: { _id: string }) => {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button type="button" variant="destructive">
+          <Button disabled={disabled} type="button" variant="destructive">
             <TrashIcon />
           </Button>
         </DialogTrigger>
