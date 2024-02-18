@@ -10,6 +10,7 @@ import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { toggleNavbar } from "@/redux/features/navbar/navbarSlice";
+import { ShoppingCart } from "lucide-react";
 
 const SideNavbar = () => {
   const path = useLocation().pathname;
@@ -35,6 +36,11 @@ const SideNavbar = () => {
       name: "Add Product",
       icon: CubeIcon,
       path: "/add-product",
+    },
+    {
+      name: "My Cart",
+      icon: ShoppingCart,
+      path: "/my-cart",
     },
     {
       name: "Sale History",
