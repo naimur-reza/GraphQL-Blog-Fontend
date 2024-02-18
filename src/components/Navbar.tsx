@@ -14,6 +14,8 @@ const Navbar = () => {
         ? "Add Product"
         : path === "/sale-history"
         ? "Sale History"
+        : path === "/my-cart"
+        ? "My Cart"
         : ""}
       <AvatarDropdown />
     </div>
