@@ -38,3 +38,4 @@ To run this project, you will need to add the following environment variables to
 
 **Validation**: Zod, EsLint
 # l2-b2-assignment-6-fronten-naimur-reza
+# Gadget-Management-Client
