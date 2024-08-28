@@ -1,11 +1,7 @@
 import App from "@/App";
-import AddProduct from "@/pages/AddProduct";
+import AddBlog from "@/pages/AddBlog";
+import Blogs from "@/pages/Blogs";
 import Dashboard from "@/pages/Dashboard";
-import Login from "@/pages/Login";
-import MyCart from "@/pages/MyCart";
-import Products from "@/pages/Products";
-import Register from "@/pages/Register";
-import SaleHistory from "@/pages/SaleHistory";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -14,28 +10,9 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <Dashboard /> },
-      { path: "/add-product", element: <AddProduct /> },
-      {
-        path: "/sale-history",
-        element: <SaleHistory />,
-      },
-      {
-        path: "/products",
-        element: <Products />,
-      },
-      {
-        path: "/my-cart",
-        element: <MyCart />,
-      },
+      { path: "/blogs", element: <Blogs /> },
+      { path: "/add-blog", element: <AddBlog /> },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
   },
 ]);
 

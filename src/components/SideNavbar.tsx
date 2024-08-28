@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import {
   DashboardIcon,
   CubeIcon,
-  ReaderIcon,
   ChevronRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
@@ -28,32 +27,28 @@ const SideNavbar = () => {
       path: "/",
     },
     {
-      name: "Products",
+      name: "Blogs",
       icon: CubeIcon,
-      path: "/products",
+      path: "/blogs",
     },
     {
-      name: "Add Product",
+      name: "Add Blog",
       icon: CubeIcon,
-      path: "/add-product",
+      path: "/add-blog",
     },
-    {
-      name: "My Cart",
-      icon: ShoppingCart,
-      path: "/my-cart",
-    },
-    {
-      name: "Sale History",
-      icon: ReaderIcon,
-      path: "/sale-history",
-    },
+    // {
+    //   name: "My Cart",
+    //   icon: ShoppingCart,
+    //   path: "/my-cart",
+    // },
   ];
 
   return (
     <div
       className={`w-44 flex-grow transition duration-300 border-r h-[100vh] p-4 relative ${
         isToggled ? "-ml-44 transition-all  " : "0 transition-all"
-      }`}>
+      }`}
+    >
       {isToggled ? (
         <ChevronRightIcon
           onClick={() => dispatch(toggleNavbar(!isToggled))}
@@ -70,7 +65,8 @@ const SideNavbar = () => {
           <NavLink key={item.path} to={item.path}>
             <Button
               className="w-full  flex items-center  justify-start "
-              variant={path === item.path ? "default" : "ghost"}>
+              variant={path === item.path ? "default" : "ghost"}
+            >
               <item.icon className="mr-2 h-4 w-4" />
               {item.name}
             </Button>
