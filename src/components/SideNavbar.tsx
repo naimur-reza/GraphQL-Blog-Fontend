@@ -6,19 +6,11 @@ import {
   ChevronRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/redux/store";
-import { toggleNavbar } from "@/redux/features/navbar/navbarSlice";
-import { ShoppingCart } from "lucide-react";
+import { useState } from "react";
 
 const SideNavbar = () => {
   const path = useLocation().pathname;
-
-  const dispatch = useAppDispatch();
-
-  const isToggled = useAppSelector(
-    (state: RootState) => state.navbarSlice.navbar
-  );
+  const [isToggled, setIsToggled] = useState(false);
 
   const options = [
     {
@@ -51,12 +43,12 @@ const SideNavbar = () => {
     >
       {isToggled ? (
         <ChevronRightIcon
-          onClick={() => dispatch(toggleNavbar(!isToggled))}
+          onClick={() => setIsToggled(!isToggled)}
           className="h-7 w-7 bg-gray-800 cursor-pointer text-white rounded-full absolute -right-4"
         />
       ) : (
         <ChevronLeftIcon
-          onClick={() => dispatch(toggleNavbar(!isToggled))}
+          onClick={() => setIsToggled(!isToggled)}
           className="h-7 w-7 bg-gray-800 cursor-pointer text-white rounded-full absolute -right-4"
         />
       )}
