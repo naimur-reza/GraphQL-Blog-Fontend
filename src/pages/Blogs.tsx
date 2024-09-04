@@ -54,6 +54,13 @@ const Blogs = () => {
               <TableCell>
                 {new Date(parseInt(post.createdAt)).toLocaleDateString()}
               </TableCell>
+
+              <TableCell>
+                <div className="flex space-x-2">
+                  <button className="btn">Edit</button>
+                  <button className="btn">Delete</button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -81,6 +88,10 @@ const columns: {
   {
     title: "Created At",
     value: "createdAt",
+  },
+  {
+    title: "Actions",
+    value: "actions",
   },
 ];
 
