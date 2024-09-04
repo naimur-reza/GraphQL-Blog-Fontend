@@ -24,7 +24,7 @@ const SideNavbar = () => {
       path: "/blogs",
     },
     {
-      name: "Add Blog",
+      name: "Create Blog",
       icon: CubeIcon,
       path: "/add-blog",
     },
