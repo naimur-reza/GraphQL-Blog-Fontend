@@ -1,4 +1,8 @@
+import Modal from "@/components/Modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
+
 import {
   Table,
   TableBody,
@@ -7,27 +11,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { GET_BLOGS } from "@/graphQL/query";
 import { IPost } from "@/types/postType";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { Edit, Trash } from "lucide-react";
 
 const Blogs = () => {
-  const GET_BLOGS = gql`
-    query getAllPosts {
-      posts {
-        title
-        image
-        published
-        createdAt
-      }
-    }
-  `;
-
   const { data, loading, error } = useQuery(GET_BLOGS);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message || "An error occurred"}</div>;
 
-  console.log(data);
+  const handleDelete = (id: string) => {
+    console.log(data);
+    console.log("Delete", id);
+  };
 
   return (
     <div className="p-5">
@@ -57,8 +56,37 @@ const Blogs = () => {
 
               <TableCell>
                 <div className="flex space-x-2">
-                  <button className="btn">Edit</button>
-                  <button className="btn">Delete</button>
+                  <Modal
+                    icon={
+                      <Button className="rounded-full  p-3">
+                        <Edit size={15} />
+                      </Button>
+                    }
+                    title="Are you sure wanna delete?"
+                    description="Once delete you can't restore it"
+                  >
+                    Done
+                  </Modal>
+                  <Modal
+                    icon={
+                      <Button className="rounded-full bg-rose-500/60 p-3">
+                        <Trash size={15} />
+                      </Button>
+                    }
+                    title="Are you sure wanna delete?"
+                    description="Once delete you can't restore it"
+                  >
+                    <DialogFooter className="sm:justify-start">
+                      <DialogClose asChild>
+                        <Button
+                          onClick={() => handleDelete(post.id)}
+                          variant="destructive"
+                        >
+                          Delete
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </Modal>
                 </div>
               </TableCell>
             </TableRow>
