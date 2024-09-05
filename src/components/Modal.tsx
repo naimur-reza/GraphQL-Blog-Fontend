@@ -18,7 +18,7 @@ const Modal = ({ title, icon, children, description }: ModalProps) => {
   return (
     <Dialog>
       <DialogTrigger>{icon}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className={" overflow-y-scroll max-h-screen"}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

@@ -5,61 +5,59 @@ import "easymde/dist/easymde.min.css";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { IPost } from "../types/postType";
-import { gql, useMutation } from "@apollo/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
+import { CREATE_POST, UPDATE_POST } from "@/graphQL/mutation";
+import ErrorMessage from "./ErrorMessage";
+import { createBlogSChema } from "./schema/validationSchema";
+import { z } from "zod";
+// import { useState } from "react";
 
 const BlogForm = ({ post }: { post?: IPost }) => {
-  const CREATE_POST = gql`
-    mutation createBlog($title: String!, $content: String!, $image: String!) {
-      createPost(title: $title, content: $content, image: $image) {
-        title
-      }
-    }
-  `;
-
-  //   const UPDATE_POST = gql`
-  //     mutation updateBlog(
-  //       $id: ID!
-  //       $title: String!
-  //       $content: String!
-  //       $image: String!
-  //     ) {
-  //       updatePost(id: $id, title: $title, content: $content, image: $image) {
-  //         title
-  //       }
-  //     }
-  //   `;
+  // const [error, setError] = useState<string>("");
 
   const [createPost] = useMutation(CREATE_POST, {
     refetchQueries: ["getAllPosts"],
     awaitRefetchQueries: true,
   });
 
+  const [updatePost] = useMutation(UPDATE_POST, {
+    refetchQueries: ["getAllPosts"],
+    awaitRefetchQueries: true,
+  });
+
+  type BlogFormProps = z.infer<typeof createBlogSChema>;
+
   const {
     register,
     handleSubmit,
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     reset,
-  } = useForm();
+  } = useForm<BlogFormProps>({ resolver: zodResolver(createBlogSChema) });
 
   const onsubmit = async (data: any) => {
-    if (post) {
-      //   await updatePost({
-      //     variables: {
-      //       id: post.id,
-      //       title: data.title,
-      //       content: data.content,
-      //       image: "https://source.unsplash.com/random"
-      //     }
-      //   });
-    } else {
-      await createPost({
-        variables: {
-          title: data.title,
-          content: data.content,
-          image: "https://source.unsplash.com/random",
-        },
-      });
+    try {
+      if (post) {
+        await updatePost({
+          variables: {
+            id: post.id,
+            title: data.title,
+            content: data.content,
+            image: "https://source.unsplash.com/random",
+          },
+        });
+      } else {
+        await createPost({
+          variables: {
+            title: data.title,
+            content: data.content,
+            image: "https://source.unsplash.com/random",
+          },
+        });
+      }
+    } catch (error) {
+      // setError("An error occurred");
     }
 
     console.log(data);
@@ -69,6 +67,8 @@ const BlogForm = ({ post }: { post?: IPost }) => {
 
   return (
     <div className="max-w-xl  p-5 mx-auto">
+      {/* {error && alert("Space is required")} */}
+
       <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
         <Input
           defaultValue={post?.title || ""}
@@ -76,17 +76,17 @@ const BlogForm = ({ post }: { post?: IPost }) => {
           placeholder="Title"
         />
 
-        {/* <ErrorMessage>{errors.title?.message}</ErrorMessage> */}
+        <ErrorMessage>{errors?.title?.message}</ErrorMessage>
         <Controller
           name="content"
-          defaultValue={post?.content || ""}
+          defaultValue={post?.content || "Contetn"}
           control={control}
           render={({ field }) => (
             <SimpleMdeReact placeholder="Content" {...field} />
           )}
         />
 
-        {/* <ErrorMessage>{errors.description?.message}</ErrorMessage> */}
+        <ErrorMessage>{errors.content?.message}</ErrorMessage>
 
         <Button disabled={isSubmitting}>
           {post ? "Update blog" : "Create blog"}

@@ -1,3 +1,4 @@
+import BlogForm from "@/components/BlogForm";
 import Modal from "@/components/Modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,30 +12,45 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DELETE_POST } from "@/graphQL/mutation";
 import { GET_BLOGS } from "@/graphQL/query";
 import { IPost } from "@/types/postType";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Edit, Trash } from "lucide-react";
 
 const Blogs = () => {
   const { data, loading, error } = useQuery(GET_BLOGS);
 
+  const [deletePost] = useMutation(DELETE_POST, {
+    refetchQueries: [{ query: GET_BLOGS }],
+    awaitRefetchQueries: true,
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message || "An error occurred"}</div>;
 
   const handleDelete = (id: string) => {
-    console.log(data);
-    console.log("Delete", id);
+    try {
+      deletePost({
+        variables: {
+          deletePostId: id,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="p-5">
-      <Table className="rounded-md md:border">
+      <Table className="rounded-md md:border ">
         <TableHeader>
           <TableRow>
             {columns.map((column) => (
-              <TableHead key={column.value}>{column.title}</TableHead>
+              <TableHead className={column.className} key={column.value}>
+                {column.title}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -50,7 +66,7 @@ const Blogs = () => {
               </TableCell>
               <TableCell>{post.title}</TableCell>
               <TableCell>{post.published ? "True" : "False"}</TableCell>
-              <TableCell>
+              <TableCell className="hidden md:table-cell">
                 {new Date(parseInt(post.createdAt)).toLocaleDateString()}
               </TableCell>
 
@@ -65,7 +81,7 @@ const Blogs = () => {
                     title="Are you sure wanna delete?"
                     description="Once delete you can't restore it"
                   >
-                    Done
+                    <BlogForm post={post} />
                   </Modal>
                   <Modal
                     icon={
@@ -100,6 +116,7 @@ const Blogs = () => {
 const columns: {
   title: string;
   value: string;
+  className?: string;
 }[] = [
   {
     title: "Image",
@@ -116,6 +133,7 @@ const columns: {
   {
     title: "Created At",
     value: "createdAt",
+    className: "hidden md:table-cell",
   },
   {
     title: "Actions",
