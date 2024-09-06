@@ -6,18 +6,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "./ui/button";
 
 interface ModalProps {
   icon: React.ReactNode;
   title: string;
   description: string;
   children: React.ReactNode;
+  color?: string;
 }
 
-const Modal = ({ title, icon, children, description }: ModalProps) => {
+const Modal = ({ title, icon, children, description, color }: ModalProps) => {
   return (
     <Dialog>
-      <DialogTrigger>{icon}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button className={`p-3 rounded-full ${color}`}>{icon}</Button>
+      </DialogTrigger>
       <DialogContent className={" overflow-y-scroll max-h-screen"}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

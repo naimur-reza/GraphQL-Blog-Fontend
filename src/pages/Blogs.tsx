@@ -73,22 +73,15 @@ const Blogs = () => {
               <TableCell>
                 <div className="flex space-x-2">
                   <Modal
-                    icon={
-                      <Button className="rounded-full  p-3">
-                        <Edit size={15} />
-                      </Button>
-                    }
-                    title="Are you sure wanna delete?"
-                    description="Once delete you can't restore it"
+                    icon={<Edit size={15} />}
+                    title="Update this post?"
+                    description="You can update this post by clicking the button below"
                   >
                     <BlogForm post={post} />
                   </Modal>
                   <Modal
-                    icon={
-                      <Button className="rounded-full bg-rose-500/60 p-3">
-                        <Trash size={15} />
-                      </Button>
-                    }
+                    color="bg-rose-500/80"
+                    icon={<Trash size={15} />}
                     title="Are you sure wanna delete?"
                     description="Once delete you can't restore it"
                   >

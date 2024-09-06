@@ -36,15 +36,16 @@ const BlogForm = ({ post }: { post?: IPost }) => {
     reset,
   } = useForm<BlogFormProps>({ resolver: zodResolver(createBlogSChema) });
 
-  const onsubmit = async (data: any) => {
+  const onsubmit = async (data: BlogFormProps) => {
     try {
       if (post) {
         await updatePost({
           variables: {
-            id: post.id,
-            title: data.title,
-            content: data.content,
-            image: "https://source.unsplash.com/random",
+            updatePostId: post.id,
+            post: {
+              title: data.title,
+              content: data.content,
+            },
           },
         });
       } else {
@@ -66,12 +67,12 @@ const BlogForm = ({ post }: { post?: IPost }) => {
   };
 
   return (
-    <div className="max-w-xl  p-5 mx-auto">
+    <div className="max-w-xl   mx-auto">
       {/* {error && alert("Space is required")} */}
 
       <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
         <Input
-          defaultValue={post?.title || ""}
+          defaultValue={post?.title}
           {...register("title")}
           placeholder="Title"
         />
@@ -79,7 +80,7 @@ const BlogForm = ({ post }: { post?: IPost }) => {
         <ErrorMessage>{errors?.title?.message}</ErrorMessage>
         <Controller
           name="content"
-          defaultValue={post?.content || "Contetn"}
+          defaultValue={post?.content}
           control={control}
           render={({ field }) => (
             <SimpleMdeReact placeholder="Content" {...field} />
@@ -88,7 +89,7 @@ const BlogForm = ({ post }: { post?: IPost }) => {
 
         <ErrorMessage>{errors.content?.message}</ErrorMessage>
 
-        <Button disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {post ? "Update blog" : "Create blog"}
           {/* {isSubmitting && <Spinner />} */}
         </Button>

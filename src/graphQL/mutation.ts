@@ -9,13 +9,8 @@ export const CREATE_POST = gql`
 `;
 
 export const UPDATE_POST = gql`
-  mutation updateBlog(
-    $id: ID!
-    $title: String!
-    $content: String!
-    $image: String!
-  ) {
-    updatePost(id: $id, title: $title, content: $content, image: $image) {
+  mutation updatePost($updatePostId: ID!, $post: PostInput!) {
+    updatePost(id: $updatePostId, post: $post) {
       title
     }
   }

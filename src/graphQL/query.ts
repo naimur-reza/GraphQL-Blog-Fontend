@@ -6,6 +6,7 @@ export const GET_BLOGS = gql`
       id
       title
       image
+      content
       published
       createdAt
     }
