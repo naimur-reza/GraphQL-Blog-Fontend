@@ -11,10 +11,14 @@ import { CREATE_POST, UPDATE_POST } from "@/graphQL/mutation";
 import ErrorMessage from "./ErrorMessage";
 import { createBlogSChema } from "./schema/validationSchema";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 // import { useState } from "react";
 
 const BlogForm = ({ post }: { post?: IPost }) => {
   // const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const [createPost] = useMutation(CREATE_POST, {
     refetchQueries: ["getAllPosts"],
@@ -48,6 +52,9 @@ const BlogForm = ({ post }: { post?: IPost }) => {
             },
           },
         });
+
+        navigate("/blogs");
+        toast("Blog updated successfully.");
       } else {
         await createPost({
           variables: {
@@ -56,6 +63,8 @@ const BlogForm = ({ post }: { post?: IPost }) => {
             image: "https://source.unsplash.com/random",
           },
         });
+        navigate("/blogs");
+        toast("Blog created successfully.");
       }
     } catch (error) {
       // setError("An error occurred");

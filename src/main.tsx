@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <ApolloProvider client={client}>
         <RouterProvider router={router} />
-        <Toaster />
+        <Toaster position="top-center" />
       </ApolloProvider>
     </ThemeProvider>
   </React.StrictMode>

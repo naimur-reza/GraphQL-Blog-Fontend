@@ -1,4 +1,5 @@
 import BlogForm from "@/components/BlogForm";
+import { LoadingSpinner } from "@/components/Loading";
 import Modal from "@/components/Modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,12 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DELETE_POST } from "@/graphQL/mutation";
+import { DELETE_POST, UPDATE_POST } from "@/graphQL/mutation";
 import { GET_BLOGS } from "@/graphQL/query";
 import { IPost } from "@/types/postType";
 import { useMutation, useQuery } from "@apollo/client";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, EyeOff, Eye } from "lucide-react";
+import { toast } from "sonner";
 
 const Blogs = () => {
   const { data, loading, error } = useQuery(GET_BLOGS);
@@ -27,16 +29,38 @@ const Blogs = () => {
     awaitRefetchQueries: true,
   });
 
-  if (loading) return <div>Loading...</div>;
+  const [updatePost] = useMutation(UPDATE_POST, {
+    refetchQueries: [{ query: GET_BLOGS }],
+    awaitRefetchQueries: true,
+  });
+
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error.message || "An error occurred"}</div>;
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     try {
-      deletePost({
+      await deletePost({
         variables: {
           deletePostId: id,
         },
       });
+      toast("Blog deleted successfully.");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePublish = async (id: string, published: boolean) => {
+    try {
+      await updatePost({
+        variables: {
+          updatePostId: id,
+          post: {
+            published: !published,
+          },
+        },
+      });
+      toast("Blog updated successfully.");
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +89,17 @@ const Blogs = () => {
                 </Avatar>
               </TableCell>
               <TableCell>{post.title}</TableCell>
-              <TableCell>{post.published ? "True" : "False"}</TableCell>
+              <TableCell>
+                {post.published ? (
+                  <span className="bg-cyan-600/80 px-2 font-medium rounded-full text-white">
+                    True
+                  </span>
+                ) : (
+                  <span className="bg-rose-600/80 px-2 font-medium rounded-full text-white">
+                    False
+                  </span>
+                )}
+              </TableCell>
               <TableCell className="hidden md:table-cell">
                 {new Date(parseInt(post.createdAt)).toLocaleDateString()}
               </TableCell>
@@ -96,6 +130,13 @@ const Blogs = () => {
                       </DialogClose>
                     </DialogFooter>
                   </Modal>
+                  <Button
+                    onClick={() => handlePublish(post.id, post.published)}
+                    variant="outline"
+                    className="rounded-full p-3"
+                  >
+                    {!post.published ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
