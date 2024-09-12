@@ -8,7 +8,7 @@ import { Toaster } from "./components/ui/sonner";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 export const client = new ApolloClient({
-  uri: "http://localhost:4000/",
+  uri: "https://holapep-server-production.up.railway.app/graphql",
   cache: new InMemoryCache(),
 });
 
