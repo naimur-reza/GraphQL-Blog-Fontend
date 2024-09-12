@@ -44,7 +44,7 @@ const SideNavbar = () => {
       {isToggled ? (
         <ChevronRightIcon
           onClick={() => setIsToggled(!isToggled)}
-          className="h-7 w-7 bg-gray-800 cursor-pointer text-white rounded-full absolute -right-4"
+          className="h-7 w-7 bg-secondary cursor-pointer text-white rounded-full absolute -right-4"
         />
       ) : (
         <ChevronLeftIcon
