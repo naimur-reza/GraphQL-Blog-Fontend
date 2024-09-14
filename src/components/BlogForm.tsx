@@ -54,7 +54,7 @@ const BlogForm = ({ post }: { post?: IPost }) => {
             post: {
               title: data.title,
               content: data.content,
-              image: imageData?.data?.display_url,
+              image: imageData?.data?.display_url || post.image,
             },
           },
         });
@@ -97,7 +97,6 @@ const BlogForm = ({ post }: { post?: IPost }) => {
         />
         <ErrorMessage>{errors?.title?.message}</ErrorMessage>
         <Input
-          required
           {...register("image")}
           placeholder="Upload Image"
           type="file"
