@@ -76,11 +76,10 @@ const BlogForm = ({ post }: { post?: IPost }) => {
       }
     } catch (error) {
       // setError("An error occurred");
-      console.log(error);
+      toast("An error occurred");
       isLoading(false);
     }
 
-    console.log(data);
     reset();
   };
 
