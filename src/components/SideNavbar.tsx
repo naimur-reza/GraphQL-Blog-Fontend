@@ -6,7 +6,7 @@ import {
   ChevronRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SideNavbar = () => {
   const path = useLocation().pathname;
@@ -35,6 +35,21 @@ const SideNavbar = () => {
     // },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsToggled(true);
+      } else {
+        setIsToggled(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       className={`w-44 flex-grow transition duration-300 border-r h-[100vh] p-4 relative ${
@@ -44,12 +59,12 @@ const SideNavbar = () => {
       {isToggled ? (
         <ChevronRightIcon
           onClick={() => setIsToggled(!isToggled)}
-          className="h-7 w-7 bg-secondary cursor-pointer text-white rounded-full absolute -right-4"
+          className="h-7 w-7 bg-black bg-secondary cursor-pointer text-white rounded-full absolute -right-4"
         />
       ) : (
         <ChevronLeftIcon
           onClick={() => setIsToggled(!isToggled)}
-          className="h-7 w-7 bg-gray-800 cursor-pointer text-white rounded-full absolute -right-4"
+          className="h-7 w-7 bg-black cursor-pointer text-white rounded-full absolute -right-4"
         />
       )}
       <div className="flex flex-col space-y-2">
