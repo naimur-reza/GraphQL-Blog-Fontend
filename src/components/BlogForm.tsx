@@ -5,7 +5,6 @@ import "easymde/dist/easymde.min.css";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { IPost } from "../types/postType";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import { CREATE_POST, UPDATE_POST } from "@/graphQL/mutation";
 import ErrorMessage from "./ErrorMessage";
@@ -13,9 +12,12 @@ import { createBlogSChema } from "./schema/validationSchema";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import uploadImage from "@/utils/uploadImage";
+import { useState } from "react";
 // import { useState } from "react";
 
 const BlogForm = ({ post }: { post?: IPost }) => {
+  const [loading, isLoading] = useState(false);
   // const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -36,42 +38,49 @@ const BlogForm = ({ post }: { post?: IPost }) => {
     register,
     handleSubmit,
     control,
-    formState: { isSubmitting, errors },
+    formState: { errors },
     reset,
-  } = useForm<BlogFormProps>({ resolver: zodResolver(createBlogSChema) });
+  } = useForm<BlogFormProps>();
 
-  const onsubmit = async (data: BlogFormProps) => {
+  const onsubmit = async (data: any) => {
+    isLoading(true);
+    const imageData = data.image ? await uploadImage(data.image[0]) : undefined;
     try {
       if (post) {
+        isLoading(true);
         await updatePost({
           variables: {
             updatePostId: post.id,
             post: {
               title: data.title,
               content: data.content,
+              image: imageData?.data?.display_url,
             },
           },
         });
-
+        isLoading(false);
         navigate("/blogs");
         toast("Blog updated successfully.");
       } else {
+        isLoading(true);
         await createPost({
           variables: {
             title: data.title,
             content: data.content,
-            image: "https://source.unsplash.com/random",
+            image: imageData?.data?.display_url,
           },
         });
+        isLoading(false);
         navigate("/blogs");
         toast("Blog created successfully.");
       }
     } catch (error) {
       // setError("An error occurred");
+      console.log(error);
+      isLoading(false);
     }
 
     console.log(data);
-
     reset();
   };
 
@@ -81,26 +90,41 @@ const BlogForm = ({ post }: { post?: IPost }) => {
 
       <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
         <Input
+          required
           defaultValue={post?.title}
           {...register("title")}
           placeholder="Title"
         />
-
         <ErrorMessage>{errors?.title?.message}</ErrorMessage>
+        <Input
+          required
+          {...register("image")}
+          placeholder="Upload Image"
+          type="file"
+          accept="image/*"
+        />
+
+        <ErrorMessage>{errors?.image?.message}</ErrorMessage>
         <Controller
           name="content"
           defaultValue={post?.content}
           control={control}
           render={({ field }) => (
-            <SimpleMdeReact placeholder="Content" {...field} />
+            <SimpleMdeReact aria-required placeholder="Content" {...field} />
           )}
         />
 
         <ErrorMessage>{errors.content?.message}</ErrorMessage>
 
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          className="flex items-center gap-2"
+          type="submit"
+          disabled={loading}
+        >
           {post ? "Update blog" : "Create blog"}
-          {/* {isSubmitting && <Spinner />} */}
+          {loading && (
+            <span className="h-4  w-4 border-2 border-dashed rounded-full animate-spin" />
+          )}
         </Button>
       </form>
     </div>
