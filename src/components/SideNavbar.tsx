@@ -10,8 +10,8 @@ import { useEffect, useState } from "react";
 
 const SideNavbar = () => {
   const path = useLocation().pathname;
-  const [isToggled, setIsToggled] = useState(false);
 
+  const [isToggled, setIsToggled] = useState(window.innerWidth < 768); // Default toggled state based on screen width
   const options = [
     {
       name: "Dashboard",
@@ -28,11 +28,6 @@ const SideNavbar = () => {
       icon: CubeIcon,
       path: "/add-blog",
     },
-    // {
-    //   name: "My Cart",
-    //   icon: ShoppingCart,
-    //   path: "/my-cart",
-    // },
   ];
 
   useEffect(() => {
@@ -43,6 +38,9 @@ const SideNavbar = () => {
         setIsToggled(false);
       }
     };
+
+    // Set initial state based on the current window width
+    handleResize();
 
     window.addEventListener("resize", handleResize);
 
@@ -59,7 +57,7 @@ const SideNavbar = () => {
       {isToggled ? (
         <ChevronRightIcon
           onClick={() => setIsToggled(!isToggled)}
-          className="h-7 w-7 bg-black bg-secondary cursor-pointer text-white rounded-full absolute -right-4"
+          className="h-7 w-7 bg-black  cursor-pointer text-white rounded-full absolute -right-4"
         />
       ) : (
         <ChevronLeftIcon
