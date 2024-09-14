@@ -82,9 +82,9 @@ const Blogs = () => {
         <TableBody>
           {data.posts.map((post: IPost) => (
             <TableRow key={post.id}>
-              <TableCell>
+              <TableCell className="hidden md:table-cell">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src={post.image} />
                   <AvatarFallback>HP</AvatarFallback>
                 </Avatar>
               </TableCell>
@@ -155,6 +155,7 @@ const columns: {
   {
     title: "Image",
     value: "image",
+    className: "hidden md:table-cell",
   },
   {
     title: "Title",
