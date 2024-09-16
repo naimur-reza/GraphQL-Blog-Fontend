@@ -30,3 +30,13 @@ export const GET_TOTAL_UNPUBLISHED_POST = gql`
     unpublishedPosts
   }
 `;
+
+export const GET_ALL_SUBSCRIBERS = gql`
+  query getAllNewsLetters {
+    getAllNewsLetters {
+      id
+      email
+      createdAt
+    }
+  }
+`;

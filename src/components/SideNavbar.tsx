@@ -28,6 +28,11 @@ const SideNavbar = () => {
       icon: CubeIcon,
       path: "/add-blog",
     },
+    {
+      name: "Subscribers",
+      icon: CubeIcon,
+      path: "/subscribers",
+    },
   ];
 
   useEffect(() => {

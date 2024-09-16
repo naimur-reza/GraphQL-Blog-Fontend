@@ -23,3 +23,11 @@ export const DELETE_POST = gql`
     }
   }
 `;
+
+export const DELETE_SUBSCRIBER = gql`
+  mutation deleteSub($deleteNewsLetterId: ID!) {
+    deleteNewsLetter(id: $deleteNewsLetterId) {
+      email
+    }
+  }
+`;
